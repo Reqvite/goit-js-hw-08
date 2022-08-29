@@ -1,33 +1,32 @@
-const form = document.querySelector('form')
-const formData = {}
+import throttle from "lodash.throttle"
+const formRef = document.querySelector('form')
+const STORAGE_KEY = "feedback-form-state"
+let formData = {}
 
-form.addEventListener('input', e => {
-    formData[e.target.name] = e.target.value
-    localStorage.setItem("feedback-form-state", JSON.stringify(formData))
+formRef.addEventListener('input', throttle(getFormValue, 500))
 
-})
+ function getFormValue(e) {
+     formData[e.target.name] = e.target.value
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(formData))
+ }
 
-checkLocalStorage()
-
-form.addEventListener('submit', (e) => {
+formRef.addEventListener('submit', (e) => {
     e.preventDefault()
     e.currentTarget.reset()
-    localStorage.removeItem('feedback-form-state')
+    localStorage.removeItem(STORAGE_KEY)
     console.log(formData);
 })
 
+checkLocalStorage()
 function checkLocalStorage() {
-    const getValue = JSON.parse(localStorage.getItem("feedback-form-state"))
-    if (!getValue) {
-        return
-    }
-    if (getValue.email) {
-        form[0].value = getValue.email
-
-    }
-    if (getValue.message) {
-        form[1].value = getValue.message
-    }
+    const getValue = JSON.parse(localStorage.getItem(STORAGE_KEY))
+    if (getValue) {
+        formRef[0].value = getValue.email
+        formRef[1].value = getValue.message
+        formData = getValue
+    } 
 }
+
+
 
 
