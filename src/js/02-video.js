@@ -6,14 +6,16 @@ const player = new Player(iframe);
 
 const onPlay = function(data) {
     const currentTime = data
+    if (currentTime) {
         localStorage.setItem("videoplayer-current-time", JSON.stringify(currentTime))
+    }       
 };
 
-    player.on('timeupdate', throttle(onPlay, 1000));
+player.on('timeupdate', throttle(onPlay, 1000));
 
-    const setCurrentTime = JSON.parse(localStorage.getItem("videoplayer-current-time"))
+const setCurrentTime = JSON.parse(localStorage.getItem("videoplayer-current-time"))
 
-    player.setCurrentTime(setCurrentTime.seconds).then(function(seconds) {
+    player.setCurrentTime(setCurrentTime?.seconds).then(function(seconds) {
 }).catch(function(error) {
     switch (error.name) {
         case 'RangeError':
