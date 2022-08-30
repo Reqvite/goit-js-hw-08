@@ -12,9 +12,14 @@ formRef.addEventListener('input', throttle(getFormValue, 500))
 
 formRef.addEventListener('submit', (e) => {
     e.preventDefault()
-    e.currentTarget.reset()
-    localStorage.removeItem(STORAGE_KEY)
-    console.log(formData);
+    if (!(formData.email && formData.message)) {
+       alert('All fields must be filled')
+    } else {
+       e.currentTarget.reset()
+       localStorage.removeItem(STORAGE_KEY)
+        console.log(formData);
+        formData = {}
+    } 
 })
 
 checkLocalStorage()
